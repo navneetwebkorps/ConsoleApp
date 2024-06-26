@@ -114,7 +114,7 @@ public class Methods {
 			}
 		} catch (InputMismatchException e) {
 			logger.warning("Invalid Input");
-			//Methods.create();
+			
 		}
 		
 
@@ -137,7 +137,7 @@ public class Methods {
 			boolean mailAns = Methods.StringValidate(mailRegrex, mail);
 			if (mailAns == false) {
 				logger.warning("Wrong mail format please re Enter Details");
-			//	Methods.update();
+			
 			}
 			else {
 			int c1 = (int) Users.stream().filter(user -> user.getEmail().equals(mail)).count();
@@ -192,7 +192,7 @@ public class Methods {
 					System.out.println("Wrong phone Number format");
 					System.out.println(".....................................");
 					
-				//	Methods.update();
+				
 				} break;
 }
 				case 2:{try {
@@ -213,7 +213,7 @@ public class Methods {
 				} catch (InputMismatchException e) {
 					logger.warning("Wrong phone number format");
 					System.out.println("........................................");
-				//	Methods.update();
+				
 				}break;
 }
 				case 3:{
@@ -237,8 +237,7 @@ public class Methods {
 		catch (InputMismatchException e) {
 			logger.warning("Invalid Input format Please try again");
 		
-			//Methods.update();
-
+			
 		}
 	}
 	// ...................................................................................
@@ -252,7 +251,7 @@ public class Methods {
 			boolean regexAns = Methods.StringValidate(mailRegrex, mail);
 			if (regexAns == false) {
 				logger.warning("Wrong mail Please Re Enter");
-			//	Methods.delete();
+			
 			}
 			int c = (int) Users.stream().filter(user -> user.getEmail().equals(mail)).count();
 			if (c == 0)
