@@ -10,15 +10,16 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Methods {
+public class Methods { 
 	public static List<User> Users = new ArrayList<>();
 	public static List<phone> p = new ArrayList<>();
-	public static String phoneRegrex = "\\s*{0}[0-9]{10}\\s*{0}";
+	public static String phoneRegrex = "\\s*{0}[1-9]{10}\\s*{0}";
 	public static String mailRegrex = "^\\s*{0}[a-zA-Z0-9]+@[a-zA-Z0-9]+(\\.[a-zA-z]{2,})\\s*{0}$";
 	public static Logger logger = Logger.getLogger(Methods.class.getName());
 	public static Scanner sc = new Scanner(System.in);
 
 	public static void Ui() throws Exception {
+		while(true) {
 		System.out.println("...........................................");
 		System.out.println("Console Base App");
 		System.out.println("Create User : 1");
@@ -27,51 +28,38 @@ public class Methods {
 		System.out.println("Fetch Single User : 4");
 		System.out.println("Fetch All User : 5");
 		System.out.println("If you want to exit and come to main pannel just press 0");
+		System.out.println("If you want to exit press 6");
+		
 
 		try {
 			int num = sc.nextInt();
 			sc.nextLine();
 
-			if (num == 1) {
+		    switch(num)
+			{
+			case 1:{Methods.create();break;}
+			case 2:{Methods.update();break;}
+			case 3:{Methods.delete();break;}
+			case 4:{Methods.fetchSingleUser();break;}
+			case 5:{Methods.fetchAllUser();break;}
+			case 6:{System.exit(num);}
+			case 0:{Methods.Ui();break;}
+			default:{logger.warning("Input invald");
 
-				Methods.create();
-			} else if (num == 2) {
-				Methods.update();
-			} else if (num == 3) {
-				Methods.delete();
-			} else if (num == 4) {
-				Methods.fetchSingleUser();
-			} else if (num == 5) {
-				Methods.fetchAllUser();
-			} else if (num == 0) {
-				Methods.Ui();
-			} else {
-
-				logger.warning("Input invald");
-
-				Methods.Ui();
+			
+			}
 			}
 
 		} catch (InputMismatchException e) {
 
 			System.out.println("..............................");
 			logger.warning("Invalid Input");
-			logger.info("wrong Input , Press any key to exit");
-			try {
-				sc.nextLine();
-				String inp = sc.nextLine();
-				System.out.println(inp);
-				if (!inp.isEmpty())
-					Methods.Ui();
-
-			} catch (InputMismatchException i) {
-				logger.severe("Error in UI Method" + i);
-
-			}
-
+			sc.nextLine();
+			
+			
 		}
 
-	}
+	}}
 
 	// .......................................................................................
 	public static void create() throws Exception {
@@ -89,6 +77,7 @@ public class Methods {
 
 			Methods.exit(mail);
 			boolean mailAns = Methods.StringValidate(mailRegrex, mail);
+			
 			if (mailAns == false) {
 
 				logger.warning("Wrong mail format please re Enter Details");
@@ -98,8 +87,8 @@ public class Methods {
 			int c = (int) Users.stream().filter(user -> user.getEmail().equals(mail)).count();
 			if (c != 0) {
 				logger.info("User Already Exist");
-				Thread.sleep(500);
-				Methods.create();
+				
+			
 			}
 			System.out.println("Enter Phone Number");
 
@@ -119,17 +108,17 @@ public class Methods {
 			boolean ans = Users.add(obj);
 			if (ans == true) {
 				logger.info("Successfuly created");
-				Thread.sleep(500);
+				
 			} else {
 				logger.warning("Not Created");
 			}
 		} catch (InputMismatchException e) {
 			logger.warning("Invalid Input");
-			Methods.create();
+			//Methods.create();
 		}
-		Thread.sleep(1000);
+		
 
-		Methods.Ui();
+	
 
 	}
 
@@ -139,25 +128,26 @@ public class Methods {
 	{
 
 		try {
-
+			
 			System.out.println("Enter mail");
 
-			String mail = sc.nextLine();
+		String mail = sc.nextLine();
 		
 			Methods.exit(mail);
 			boolean mailAns = Methods.StringValidate(mailRegrex, mail);
 			if (mailAns == false) {
 				logger.warning("Wrong mail format please re Enter Details");
-				Methods.update();
+			//	Methods.update();
 			}
+			else {
 			int c1 = (int) Users.stream().filter(user -> user.getEmail().equals(mail)).count();
 
 			if (c1 == 0) {
 				logger.info("User Not Found");
-				Methods.Ui();
+			return;
 
 			}
-
+			}
 			System.out.println("Update Phone number : 1");
 			System.out.println("Add another Phone number : 2");
 			System.out.println("Update name : 3");
@@ -166,91 +156,88 @@ public class Methods {
 				int num = sc.nextInt();
 				sc.nextLine();
 
-				if (num == 1) {
-					try {
-						System.out.println("Enter Old phone Unmber");
+								switch (num) {
+				
+				case 1:{try {
+					
+					System.out.println("Enter Old phone Unmber");
 
-						String phOld = sc.nextLine();
-						Methods.exit(phOld);
-						boolean phoneOldAns = Methods.StringValidate(phoneRegrex, phOld);
-						if (phoneOldAns == false) {
-							logger.warning("Wrong phone no. format please re Enter Details");
-							Methods.update();
-						}
-						System.out.println("Enter phone number for update");
+					String phOld = sc.nextLine();
+					Methods.exit(phOld);
+					boolean phoneOldAns = Methods.StringValidate(phoneRegrex, phOld);
+					if (phoneOldAns == false) {
+						logger.warning("Wrong phone no. format please re Enter Details");
+						Methods.update();
+					}
+					System.out.println("Enter phone number for update");
 
-						String ph = sc.nextLine();
-						Methods.exit(ph);
-						boolean phoneAns = Methods.StringValidate(phoneRegrex, ph);
-						if (phoneAns == false) {
-							logger.warning("Wrong phone no. format please re Enter Details");
-							Methods.update();
-						}
-						Users.stream().filter(user -> user.getEmail().equals(mail)).findFirst().ifPresent(user -> {
-							p.stream().filter(ph1 -> ph1.getMail().equals(mail)).findFirst().ifPresent(ph1 -> {
-								ph1.replacePhone(phOld, ph);
-								logger.info("Phone number is modified");
-								try {
-									Thread.sleep(500);
-								} catch (InterruptedException e) {
-
-									 e.printStackTrace();
-								}
-							});
+					String ph = sc.nextLine();
+					Methods.exit(ph);
+					boolean phoneAns = Methods.StringValidate(phoneRegrex, ph);
+					if (phoneAns == false) {
+						logger.warning("Wrong phone no. format please re Enter Details");
+						Methods.update();
+					}
+					Users.stream().filter(user -> user.getEmail().equals(mail)).findFirst().ifPresent(user -> {
+						p.stream().filter(ph1 -> ph1.getMail().equals(mail)).findFirst().ifPresent(ph1 -> {
+							ph1.replacePhone(phOld, ph);
+							logger.info("Phone number is modified");
+							
 						});
+					});
 
-					}
+				}
 
-					catch (InputMismatchException e) {
-						System.out.println("Wrong phone Number format");
-						System.out.println(".....................................");
-						Thread.sleep(500);
+				catch (InputMismatchException e) {
+					System.out.println("Wrong phone Number format");
+					System.out.println(".....................................");
+					
+				//	Methods.update();
+				} break;
+}
+				case 2:{try {
+					System.out.println("Add Phone Number");
+					String ph = sc.nextLine();
+					Methods.exit(ph);
+					boolean phoneAns = Methods.StringValidate(phoneRegrex, ph);
+					if (phoneAns == false) {
+						logger.warning("Wrong phone no. format please re Enter Details");
 						Methods.update();
+
 					}
+					p.stream().filter(ph1 -> (ph1.getMail().equals(mail))).findFirst()
+							.ifPresent(ph1 -> ph1.addPhone(ph));
+					logger.info("Phone number added Successfuly");
+					
 
-				} else if (num == 2) {
-					try {
-						System.out.println("Add Phone Number");
-						String ph = sc.nextLine();
-						Methods.exit(ph);
-						boolean phoneAns = Methods.StringValidate(phoneRegrex, ph);
-						if (phoneAns == false) {
-							logger.warning("Wrong phone no. format please re Enter Details");
-							Methods.update();
-
-						}
-						p.stream().filter(ph1 -> (ph1.getMail().equals(mail))).findFirst()
-								.ifPresent(ph1 -> ph1.addPhone(ph));
-						logger.info("Phone number added Successfuly");
-						Thread.sleep(500);
-
-					} catch (InputMismatchException e) {
-						logger.warning("Wrong phone number format");
-						System.out.println("........................................");
-						Methods.update();
-					}
-				} else if (num == 3) {
+				} catch (InputMismatchException e) {
+					logger.warning("Wrong phone number format");
+					System.out.println("........................................");
+				//	Methods.update();
+				}break;
+}
+				case 3:{
 					System.out.println("Enter new name");
 					String newName = sc.nextLine();
 					Methods.exit(newName);
 					Users.stream().filter(user -> user.getEmail().equals(mail)).findFirst()
 							.ifPresent(user -> user.setName(newName));
 					logger.info("Name changed Successfully");
-					Thread.sleep(500);
-				} else {
-					System.out.println("Wrong Input");
+					
+					break;}
+				default:{System.out.println("Wrong Input");}
 				}
 			} catch (InputMismatchException e) {
 				logger.warning("Invalid Input");
 			}
 
-			Methods.Ui();
+		
 		}
 
 		catch (InputMismatchException e) {
 			logger.warning("Invalid Input format Please try again");
-			Thread.sleep(300);
-			Methods.update();
+		
+			//Methods.update();
 
 		}
 	}
@@ -265,7 +252,7 @@ public class Methods {
 			boolean regexAns = Methods.StringValidate(mailRegrex, mail);
 			if (regexAns == false) {
 				logger.warning("Wrong mail Please Re Enter");
-				Methods.delete();
+			//	Methods.delete();
 			}
 			int c = (int) Users.stream().filter(user -> user.getEmail().equals(mail)).count();
 			if (c == 0)
@@ -275,14 +262,14 @@ public class Methods {
 					.ifPresent(user -> Users.remove(user));
 			p.stream().filter(pho -> pho.getMail().equals(mail)).findFirst().ifPresent(pho -> p.remove(pho));
 			logger.info("Successfully removed");
-			Thread.sleep(500);
+			
 
 		} catch (InputMismatchException e) {
 			logger.warning("Invalid mail");
 			System.out.println("..........................................");
 		}
 
-		Methods.Ui();
+	
 	}
 
 	// .....................................................................................
@@ -305,13 +292,7 @@ public class Methods {
 				System.out.println("Mail : " + user.getEmail());
 				System.out.println("Phone no. : " + objP.getPhone());
 				c[0]++;
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-
-					e.printStackTrace();
-				}
-
+				
 			});
 		});
 		try {
@@ -320,10 +301,10 @@ public class Methods {
 			}
 		} catch (UserPrincipalNotFoundException u) {
 			logger.info("User Not Found" + u);
-			Thread.sleep(500);
+			
 		}
 
-		Methods.Ui();
+
 	}
 
 	// ......................................................................................
@@ -336,16 +317,12 @@ public class Methods {
 				System.out.println("Mail : " + user.getEmail());
 				System.out.println("Phone no. :  1" + objP.getPhone());
 				System.out.println(".........................................");
-				try {
-					Thread.sleep(1000);
-				} catch (Exception e) {
-					logger.warning("Exception in thread.sleep");
-				}
+				
 
 			});
 		}
 
-		Methods.Ui();
+	
 
 	}
 
