@@ -63,6 +63,8 @@ public class Methods {
 
 	// .......................................................................................
 	public static void create() throws Exception {
+		
+		while(true) {
 
 		try {
 
@@ -80,25 +82,27 @@ public class Methods {
 			
 			if (mailAns == false) {
 
-				logger.warning("Wrong mail format please re Enter Details");
-				Methods.create();
+				logger.warning("Wrong mail format please re Enter Details");continue;
+			
 
 			}
 			int c = (int) Users.stream().filter(user -> user.getEmail().equals(mail)).count();
 			if (c != 0) {
-				logger.info("User Already Exist");
+				logger.info("User Already Exist");continue;
 				
 			
 			}
 			System.out.println("Enter Phone Number");
 
 			String phone = sc.nextLine();
+			if(phone.length()==1)
 			Methods.exit(phone);
 
 			boolean phoneAns = Methods.StringValidate(phoneRegrex, phone);
+			
 			if (phoneAns == false) {
-				logger.warning("Wrong phone no. format please re Enter Details");
-				Methods.create();
+				logger.warning("Wrong phone no. format please re Enter Details");continue;
+				
 			}
 			List<String> newPhone = new ArrayList<>();
 			newPhone.add(phone);
@@ -108,25 +112,27 @@ public class Methods {
 			boolean ans = Users.add(obj);
 			if (ans == true) {
 				logger.info("Successfuly created");
+				return;
 				
 			} else {
 				logger.warning("Not Created");
+				return;
 			}
 		} catch (InputMismatchException e) {
 			logger.warning("Invalid Input");
-			
-		}
+			return;
+				}
 		
 
 	
 
-	}
+	}}
 
 	// .........................................................................................
 	public static void update() throws Exception
 
 	{
-
+			while(true) {
 		try {
 			
 			System.out.println("Enter mail");
@@ -136,7 +142,7 @@ public class Methods {
 			Methods.exit(mail);
 			boolean mailAns = Methods.StringValidate(mailRegrex, mail);
 			if (mailAns == false) {
-				logger.warning("Wrong mail format please re Enter Details");
+				logger.warning("Wrong mail format please re Enter Details");continue;
 			
 			}
 			else {
@@ -158,7 +164,10 @@ public class Methods {
 
 								switch (num) {
 				
-				case 1:{try {
+				case 1:{
+					while (true) {
+					try {
+				
 					
 					System.out.println("Enter Old phone Unmber");
 
@@ -166,8 +175,8 @@ public class Methods {
 					Methods.exit(phOld);
 					boolean phoneOldAns = Methods.StringValidate(phoneRegrex, phOld);
 					if (phoneOldAns == false) {
-						logger.warning("Wrong phone no. format please re Enter Details");
-						Methods.update();
+						logger.warning("Wrong phone no. format please re Enter Details");continue;
+						
 					}
 					System.out.println("Enter phone number for update");
 
@@ -175,46 +184,47 @@ public class Methods {
 					Methods.exit(ph);
 					boolean phoneAns = Methods.StringValidate(phoneRegrex, ph);
 					if (phoneAns == false) {
-						logger.warning("Wrong phone no. format please re Enter Details");
-						Methods.update();
+						logger.warning("Wrong phone no. format please re Enter Details");continue;
+						
 					}
 					Users.stream().filter(user -> user.getEmail().equals(mail)).findFirst().ifPresent(user -> {
 						p.stream().filter(ph1 -> ph1.getMail().equals(mail)).findFirst().ifPresent(ph1 -> {
 							ph1.replacePhone(phOld, ph);
 							logger.info("Phone number is modified");
 							
+							
 						});
-					});
-
+					});return;
+					
 				}
 
 				catch (InputMismatchException e) {
 					System.out.println("Wrong phone Number format");
 					System.out.println(".....................................");
+					return;
 					
-				
-				} break;
+								} }
 }
-				case 2:{try {
+				case 2:{   while(true){try {
 					System.out.println("Add Phone Number");
 					String ph = sc.nextLine();
 					Methods.exit(ph);
 					boolean phoneAns = Methods.StringValidate(phoneRegrex, ph);
 					if (phoneAns == false) {
-						logger.warning("Wrong phone no. format please re Enter Details");
-						Methods.update();
+						logger.warning("Wrong phone no. format please re Enter Details");continue;
+					
 
 					}
 					p.stream().filter(ph1 -> (ph1.getMail().equals(mail))).findFirst()
 							.ifPresent(ph1 -> ph1.addPhone(ph));
 					logger.info("Phone number added Successfuly");
+					return;
 					
 
 				} catch (InputMismatchException e) {
 					logger.warning("Wrong phone number format");
 					System.out.println("........................................");
-				
-				}break;
+								}break;}
 }
 				case 3:{
 					System.out.println("Enter new name");
@@ -223,8 +233,9 @@ public class Methods {
 					Users.stream().filter(user -> user.getEmail().equals(mail)).findFirst()
 							.ifPresent(user -> user.setName(newName));
 					logger.info("Name changed Successfully");
+					return;
 					
-					break;}
+				}
 				default:{System.out.println("Wrong Input");}
 				}
 			} catch (InputMismatchException e) {
@@ -238,41 +249,44 @@ public class Methods {
 			logger.warning("Invalid Input format Please try again");
 		
 			
+
 		}
-	}
+	}}
 	// ...................................................................................
 
 	public static void delete() throws Exception {
 
-		try {
+		try {while (true) {
 			System.out.println("Enter mail");
 			String mail = sc.nextLine();
 			Methods.exit(mail);
 			boolean regexAns = Methods.StringValidate(mailRegrex, mail);
 			if (regexAns == false) {
-				logger.warning("Wrong mail Please Re Enter");
+				logger.warning("Wrong mail Please Re Enter");continue;
 			
 			}
 			int c = (int) Users.stream().filter(user -> user.getEmail().equals(mail)).count();
 			if (c == 0)
-				logger.info("User Not Found");
+				{logger.info("User Not Found");return;}
 
 			Users.stream().filter(user -> user.getEmail().equals(mail)).findFirst()
 					.ifPresent(user -> Users.remove(user));
 			p.stream().filter(pho -> pho.getMail().equals(mail)).findFirst().ifPresent(pho -> p.remove(pho));
 			logger.info("Successfully removed");
-			
+			return;
+		}
 
 		} catch (InputMismatchException e) {
 			logger.warning("Invalid mail");
 			System.out.println("..........................................");
 		}
-
+		
 	
 	}
 
 	// .....................................................................................
 	public static void fetchSingleUser() throws Exception {
+		while(true) {
 		System.out.println("Enter mail");
 
 		String mail = sc.nextLine();
@@ -280,8 +294,8 @@ public class Methods {
 
 		boolean mailAns = Methods.StringValidate(mailRegrex, mail);
 		if (mailAns == false) {
-			logger.warning("Invalid input please reEnter");
-			Methods.fetchSingleUser();
+			logger.warning("Invalid input please reEnter");continue;
+			
 		}
 
 		int[] c = { 0 };
@@ -298,12 +312,16 @@ public class Methods {
 			if (c[0] == 0) {
 				throw new UserPrincipalNotFoundException(mail);
 			}
+			else {
+				return;
+			}
 		} catch (UserPrincipalNotFoundException u) {
 			logger.info("User Not Found" + u);
+			return;
 			
 		}
 
-
+		}
 	}
 
 	// ......................................................................................
